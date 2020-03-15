@@ -2,7 +2,7 @@ from app import app, mongo
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from flask import jsonify, request
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # Endpoint for creating new user
@@ -32,7 +32,9 @@ def add_user():
 # Endpoint to list all user
 @app.route('/users')
 def users():
-  pass
+  users = mongo.db.user.find()
+  resp = dumps(users)
+  return resp
 
 
 # Endpoint to find a user
