@@ -8,7 +8,25 @@ from werkzeug import generate_password_hash, check_password_hash
 # Endpoint for creating new user
 @app.route('/add', methods=['POST'])
 def add_user():
-  pass
+  _json = request.json
+  _name = _json['name']
+  _email = _json['email']
+  _password = _json['pwd']
+  # Validate the received values
+  if _name and _email and _password and request.method == 'POST':
+    # do not save password as a plain text
+    _hashed_password = generate_password_hash(_password)
+    # save details
+    id = mongo.db.user.insert({
+      'name': _name,
+      'email': _email,
+      'pwd': _hashed_password
+    })
+    resp = jsonify('User added successfully!')
+    resp.status_code = 200
+    return resp
+  else:
+    return not_found()
 
 
 # Endpoint to list all user
