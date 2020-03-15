@@ -58,7 +58,8 @@ def update_user():
         # hash the password
         _hashed_password = generate_password_hash(_password)
         # save edits
-        mongo.db.user.update_one({'_id': ObjectId(_id['$oid']) if '$oid' in _id else ObjectId(_id)}, {'$set': {'name': _name, 'email': _email, 'pwd': _hashed_password}})
+        mongo.db.user.update_one({'_id': ObjectId(_id['$oid']) if '$oid' in _id else ObjectId(_id)},
+                                 {'$set': {'name': _name, 'email': _email, 'pwd': _hashed_password}})
         resp = jsonify('User updated successfully!')
         resp.status_code = 200
         return resp
@@ -69,7 +70,10 @@ def update_user():
 # Endpoint to delete user
 @app.route('/delete/<id>', methods=['DELETE'])
 def delete_user(id):
-    pass
+    mongo.db.user.delete_one({'_id': ObjectId(id)})
+    resp = jsonify('User deleted successfully!')
+    resp.status_code = 200
+    return resp
 
 
 # 404 method to handle not found error
